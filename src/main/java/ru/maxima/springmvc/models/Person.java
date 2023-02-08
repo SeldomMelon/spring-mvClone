@@ -17,8 +17,6 @@ public class Person {
     @Email(message = "Email should be valid")
     private String email;
 
-    private boolean isAdmin;
-
 
     public Person() {
     }
@@ -62,11 +60,4 @@ public class Person {
         this.name = name;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
 }

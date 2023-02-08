@@ -42,57 +42,7 @@ public class PersonDAO {
         jdbcTemplate.update("delete from person where id = ?", id);
     }
 
-    public void makeAdmin(Person person) {
-        person.setAdmin(true);
-        jdbcTemplate.update("update person set is_admin = ? where id = ?",
-                person.isAdmin(), person.getId());
-    }
 
-    public void testWithoutBatch() {
-        long start = System.currentTimeMillis();
-
-        List<Person> people = create1000person();
-        for (Person person : people) {
-            jdbcTemplate.update("insert into person values(?, ?, ?, ?)", person.getId(), person.getName(),
-                    person.getAge(), person.getEmail());
-        }
-
-        long end = System.currentTimeMillis();
-        System.out.println("Without BatchUpdate- " + ( end - start ));
-    }
-
-    public void testWithBatch() {
-        long start = System.currentTimeMillis();
-        List<Person> people = create1000person();
-
-        jdbcTemplate.batchUpdate("insert into person values(?, ?, ?, ?)", new BatchPreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
-                preparedStatement.setInt(1, people.get(i).getId());
-                preparedStatement.setString(2, people.get(i).getName());
-                preparedStatement.setInt(3, people.get(i).getAge());
-                preparedStatement.setString(4, people.get(i).getEmail());
-            }
-
-            @Override
-            public int getBatchSize() {
-                return people.size();
-            }
-        });
-
-        long end = System.currentTimeMillis();
-        System.out.println("With BatchUpdate- " + ( end - start ));
-    }
-
-    public List<Person> create1000person(){
-        List<Person> people = new ArrayList<>();
-
-        for (int i = 0; i < 1000; i++) {
-            people.add(new Person(i,"Name" + i, i, "test" + i + "@mail.ru"));
-
-        }
-        return people;
-    }
 
 
 }
